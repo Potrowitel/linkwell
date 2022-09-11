@@ -101,6 +101,9 @@ class LinkWell extends StatelessWidget {
   /// by default can also be null
   final Key? key;
 
+  /// Link tapped
+  final Function(String url)? tapped;
+
   /// LinkWell class is constructed here
   LinkWell(
     this.text, {
@@ -116,6 +119,7 @@ class LinkWell extends StatelessWidget {
     this.locale,
     this.strutStyle,
     this.listOfNames,
+    this.tapped,
     this.textWidthBasis = TextWidthBasis.parent,
   })  : assert(text != null),
         assert(textAlign != null),
@@ -220,7 +224,10 @@ class LinkWell extends StatelessWidget {
         var link = TextSpan(
             text: name,
             style: linkStyle == null ? Helper.linkDefaultTextStyle : linkStyle,
-            recognizer: new TapGestureRecognizer()..onTap = () => launch(url));
+            recognizer: new TapGestureRecognizer()
+              ..onTap = () {
+                tapped?.call(url);
+              });
 
         /// added
         textSpanWidget.add(link);
@@ -229,7 +236,9 @@ class LinkWell extends StatelessWidget {
 
         var l = value.toString().contains('https://')
             ? value
-            : value.toString().contains('http://') ? value : 'http://' + value;
+            : value.toString().contains('http://')
+                ? value
+                : 'http://' + value;
         var name = l;
 
         if (this.listOfNames != null) {
@@ -244,7 +253,10 @@ class LinkWell extends StatelessWidget {
         var link = TextSpan(
             text: name,
             style: linkStyle == null ? Helper.linkDefaultTextStyle : linkStyle,
-            recognizer: new TapGestureRecognizer()..onTap = () => launch(l));
+            recognizer: new TapGestureRecognizer()
+              ..onTap = () {
+                tapped?.call(l);
+              });
 
         /// added
         textSpanWidget.add(link);
